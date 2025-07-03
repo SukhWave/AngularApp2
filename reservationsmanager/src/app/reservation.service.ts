@@ -7,7 +7,7 @@ import { Reservation } from './reservation';
   providedIn: 'root',
 })
 export class ReservationService {
-  baseUrl = 'http://localhost/reservationsapi';  
+  baseUrl = 'http://localhost/angularapp2/reservationsapi';  
 
   constructor(private http: HttpClient) {}
 

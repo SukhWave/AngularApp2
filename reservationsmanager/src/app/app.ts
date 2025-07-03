@@ -1,6 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
+import { NgForm } from '@angular/forms';
+
+import { Reservation } from './reservation';
+import { ReservationService } from './reservation.service';
+
+import { HttpClient } from '@angular/common/http';
+
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
@@ -8,5 +15,6 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.css'
 })
 export class App {
-  protected title = 'reservationsmanager';
+  protected title = 'reservationmanager';
 }
+

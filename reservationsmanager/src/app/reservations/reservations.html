@@ -1,0 +1,38 @@
+<div id="theList">
+  <h2>Reservation List</h2>
+
+  <div *ngFor="let item of reservations; let i = index;" class="row">
+
+    <div class="col-2">
+      <input type="text"
+        [(ngModel)]="item.areaName"
+        class="form-control"
+        required
+        #areaName="ngModel"
+        [ngClass]="{ 'is-invalid': areaName.touched && areaName.invalid }">
+    </div>
+
+    <div class="col-2">
+      <input type="text"
+        [(ngModel)]="item.timeSlots"
+        class="form-control"
+        required
+        #timeSlots="ngModel"
+        [ngClass]="{ 'is-invalid': timeSlots.touched && timeSlots.invalid }">
+    </div>
+
+    <div class="col-2">
+      <input type="checkbox"
+        [(ngModel)]="item.Booked"
+        class="form-check-input" disabled>
+    </div>
+
+    <div class="col-2">
+      <img [src]="'http://localhost/angularapp2/reservationsapi/uploads/' + item.imageName"
+           width="75"
+           height="75"
+           [alt]="item.imageName" />
+    </div>
+
+  </div>
+</div>
