@@ -1,38 +1,59 @@
 <div id="theList">
   <h2>Reservation List</h2>
 
-  <div *ngFor="let item of reservations; let i = index;" class="row">
+  <div>
+    <div *ngFor="let item of reservations; let i = index;" class="row">
 
-    <div class="col-2">
-      <input type="text"
-        [(ngModel)]="item.areaName"
-        class="form-control"
-        required
-        #areaName="ngModel"
-        [ngClass]="{ 'is-invalid': areaName.touched && areaName.invalid }">
+      <!-- bookingID can be hidden or shown as read-only if you want -->
+      <!--
+      <div class="col-2">
+        <input type="text"
+          [(ngModel)]="item.bookingID"
+          class="form-control"
+          readonly />
+      </div>
+      -->
+
+      <div class="col-2">
+        <input type="text"
+          [(ngModel)]="item.areaName"
+          class="form-control"
+          required
+          #areaName="ngModel"
+          [ngClass]="{ 'is-invalid': areaName.touched && areaName.invalid }" />
+      </div>
+
+      <div class="col-2">
+        <input type="text"
+          [(ngModel)]="item.timeSlots"
+          class="form-control"
+          required
+          #timeSlots="ngModel"
+          [ngClass]="{ 'is-invalid': timeSlots.touched && timeSlots.invalid }" />
+      </div>
+
+      <div class="col-2">
+        <input type="checkbox"
+          [checked]="item.Booked == 1"
+          class="form-check-input"
+          disabled />
+      </div>
+
+      <div class="col-2">
+        <img [src]="'http://localhost/angularapp2/reservationsapi/uploads/' + item.imageName"
+             width="75"
+             height="75"
+             [alt]="item.imageName" />
+      </div>
+
+      <!-- Optional buttons for edit/delete, commented out for now -->
+      <!--
+      <div class="col-2">
+        <button class="btn btn-success btn-sm" disabled>Edit</button>
+        <button class="btn btn-danger btn-sm" disabled>Delete</button>
+      </div>
+      -->
+
     </div>
-
-    <div class="col-2">
-      <input type="text"
-        [(ngModel)]="item.timeSlots"
-        class="form-control"
-        required
-        #timeSlots="ngModel"
-        [ngClass]="{ 'is-invalid': timeSlots.touched && timeSlots.invalid }">
-    </div>
-
-    <div class="col-2">
-      <input type="checkbox"
-        [(ngModel)]="item.Booked"
-        class="form-check-input" disabled>
-    </div>
-
-    <div class="col-2">
-      <img [src]="'http://localhost/angularapp2/reservationsapi/uploads/' + item.imageName"
-           width="75"
-           height="75"
-           [alt]="item.imageName" />
-    </div>
-
   </div>
 </div>
