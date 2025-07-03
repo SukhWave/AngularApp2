@@ -1,5 +1,6 @@
 #theForm, #theList, #links {
     padding: 10px;
     border: 2px solid black;
-    margin: 10px;
+    margin: 50px;
+    justify-content: center;
 }
