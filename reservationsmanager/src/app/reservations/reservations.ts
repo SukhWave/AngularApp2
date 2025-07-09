@@ -69,4 +69,27 @@ export class Reservations implements OnInit {
     this.error = '';
     this.success = '';
   }
+
+  //  Edit reservation
+  editReservation(areaName: any, timeSlots: any, booked: boolean, bookingID: number): void {
+    const updatedReservation = {
+      bookingID: bookingID,
+      areaName: areaName.value,
+      timeSlots: timeSlots.value,
+      Booked: booked ? 1 : 0
+    };
+
+    this.http.put<any>(
+      'http://localhost/angularapp2/reservationsapi/edit.php',
+      { data: updatedReservation }
+    ).subscribe({
+      next: () => {
+        alert('Reservation updated successfully.');
+      },
+      error: err => {
+        alert('Failed to update reservation.');
+        console.error(err);
+      }
+    });
+  }
 }

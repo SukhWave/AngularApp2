@@ -1,28 +1,62 @@
-<div id="theList" class="container mt-4">
-  <h2 class="mb-4 text-center">Reservation List</h2>
+<div id="theForm">
+  <h2>Reservation Form</h2>
+  <form #rForm="ngForm" name="reservationForm" (submit)="addReservation(rForm)">
 
-  <!-- Header Row -->
-  <div class="row border-bottom pb-2 mb-3 fw-bold text-primary" style="border-width: 2px !important;">
-    <!-- <div class="col-2">Booking ID</div> -->
-    <div class="col-2">Area Name</div>
-    <div class="col-2">Time Slots</div>
-    <div class="col-2 text-center">Select</div>
-    <div class="col-2">Image</div>
-    <!-- <div class="col-2">Actions</div> -->
-  </div>
-
-  <!-- Data Rows -->
-  <div *ngFor="let item of reservations; let i = index;" class="row align-items-center mb-3 py-2 shadow-sm rounded">
-    
-    <!-- BookingID (optional) -->
-    <!--
-    <div class="col-2">
+    <div class="form-group">
+      <label>Area Name</label>
       <input type="text"
-        [(ngModel)]="item.bookingID"
         class="form-control"
-        readonly />
+        name="areaName"
+        [(ngModel)]="reservation.areaName"
+        #areaNameModel="ngModel"
+        required>
+      <span class="help-block danger" *ngIf="areaNameModel.errors?.['required'] && areaNameModel.touched">
+        Area name is required.
+      </span>
     </div>
-    -->
+
+    <div class="form-group">
+      <label>Time Slots</label>
+      <input type="text"
+        class="form-control"
+        name="timeSlots"
+        [(ngModel)]="reservation.timeSlots"
+        #timeSlotsModel="ngModel"
+        required>
+      <span class="help-block danger" *ngIf="timeSlotsModel.errors?.['required'] && timeSlotsModel.touched">
+        Time slots are required.
+      </span>
+    </div>
+
+    <div class="form-group form-check">
+      <input type="checkbox"
+        class="form-check-input"
+        name="Booked"
+        [(ngModel)]="reservation.Booked">
+      <label class="form-check-label">Booked</label>
+    </div>
+
+    <div class="form-group">
+      <label>Upload Image</label>
+      <input type="file"
+        class="form-control"
+        name="imageName"
+        (change)="onFileSelected($event)">
+    </div>
+
+    <button
+      class="btn btn-primary btn-sm"
+      [disabled]="rForm.invalid">
+      Add Reservation
+    </button>
+
+  </form>
+</div>
+
+<div id="theList">
+  <h2>Reservation List</h2>
+
+  <div *ngFor="let item of reservations; let i = index;" class="row">
 
     <div class="col-2">
       <input type="text"
@@ -30,7 +64,7 @@
         class="form-control"
         required
         #areaName="ngModel"
-        [ngClass]="{ 'is-invalid': areaName.touched && areaName.invalid }" />
+        [ngClass]="{ 'is-invalid': areaName.touched && areaName.invalid }">
     </div>
 
     <div class="col-2">
@@ -39,29 +73,37 @@
         class="form-control"
         required
         #timeSlots="ngModel"
-        [ngClass]="{ 'is-invalid': timeSlots.touched && timeSlots.invalid }" />
+        [ngClass]="{ 'is-invalid': timeSlots.touched && timeSlots.invalid }">
     </div>
 
     <div class="col-2 d-flex justify-content-center">
       <input type="checkbox"
         [(ngModel)]="item.Booked"
-        class="form-check-input" />
+        class="form-check-input">
     </div>
 
     <div class="col-2">
       <img [src]="'http://localhost/angularapp2/reservationsapi/uploads/' + item.imageName"
            alt="{{item.imageName}}"
            class="img-thumbnail"
-           style="width: 75px; height: 75px; object-fit: cover;" />
+           style="width: 75px; height: 75px; object-fit: cover;">
     </div>
 
-    <!-- Optional buttons -->
-    <!--
-    <div class="col-2">
-      <button class="btn btn-success btn-sm" disabled>Edit</button>
-      <button class="btn btn-danger btn-sm" disabled>Delete</button>
-    </div>
-    -->
+<div class="col-2">
+  <input type="button"
+    value="Edit"
+    class="btn btn-success btn-sm"
+    [disabled]="areaName.invalid || timeSlots.invalid"
+    (click)="editReservation(areaName, timeSlots, !!item.Booked, item.bookingID ?? 0)">
+</div>
 
-  </div>
+</div>
+
+<div id="links">
+  <button class="btn btn-sm btn-primary" routerLink="/add">
+    Add Reservation
+  </button>
+  <button class="btn btn-sm btn-primary" routerLink="/about">
+    About Us
+  </button>
 </div>
