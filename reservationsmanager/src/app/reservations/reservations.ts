@@ -54,21 +54,34 @@ export class Reservations implements OnInit {
     );
   }
 
-  addReservation(f: NgForm) {
-    // Add logic if needed
+addReservation(f: NgForm): void {
+  if (f.invalid) {
+    return;
   }
 
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
+  this.reservation.imageName = this.selectedFile
+    ? this.selectedFile.name
+    : 'placeholder_100.jpg';
+
+  this.reservationService.add(this.reservation).subscribe({
+    next: (res) => {
+      alert('Reservation added successfully!');
+      this.getReservations();        // Refresh list
+      f.resetForm();                 // Clear form
+      this.reservation = {
+        areaName: '',
+        timeSlots: '',
+        Booked: 0,
+        imageName: ''
+      };
+      this.selectedFile = null;
+    },
+    error: (err) => {
+      console.error('Failed to add reservation:', err);
+      alert('Failed to add reservation.');
     }
-  }
-
-  resetAlerts(): void {
-    this.error = '';
-    this.success = '';
-  }
+  });
+}
 
   //  Edit reservation
   editReservation(areaName: any, timeSlots: any, booked: boolean, bookingID: number): void {
@@ -91,5 +104,13 @@ export class Reservations implements OnInit {
         console.error(err);
       }
     });
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+      this.reservation.imageName = this.selectedFile.name;
+    }
   }
 }
