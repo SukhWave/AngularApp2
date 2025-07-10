@@ -25,3 +25,7 @@
     margin: 10px;
     text-align: left; 
 }
+#links > button {
+    width: 10%;
+    margin-left: 10px;
+}
