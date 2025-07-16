@@ -1,0 +1,45 @@
+<div class="container">
+  <h2>Add Reservation</h2>
+  <form #f="ngForm" (ngSubmit)="addReservation(f)">
+    
+    <div class="form-group">
+      <label>Area Name</label>
+      <input type="text" name="areaName" class="form-control" [(ngModel)]="reservation.areaName" required>
+    </div>
+
+    <div class="form-group">
+      <label>Time Slot</label>
+      <select name="timeSlots" class="form-control" [(ngModel)]="reservation.timeSlots" required>
+        <option value="9am - 12pm">9am - 12pm</option>
+        <option value="12pm - 3pm">12pm - 3pm</option>
+        <option value="3pm - 6pm">3pm - 6pm</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Booked</label>
+      <select name="Booked" class="form-control" [(ngModel)]="reservation.Booked" required>
+        <option [value]="1">Yes</option>
+        <option [value]="0">No</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Upload Image</label>
+      <input type="file" class="form-control" name="image" (change)="onFileSelected($event)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary mr-2" [disabled]="f.invalid">Add Reservation</button>
+    <button class="btn btn-secondary" routerLink="/reservations">Cancel</button>
+
+    <div *ngIf="success" class="alert alert-success mt-3">{{ success }}</div>
+    <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
+  </form>
+</div>
+
+<div id="links">
+  <button class="btn btn-sm btn-dark text-white" routerLink="/reservations">
+    Back to Reservation List
+  </button>
+</div>
+

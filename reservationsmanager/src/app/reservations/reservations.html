@@ -1,4 +1,4 @@
-<div id="theForm">
+<!--div id="theForm">
   <h2>Reservation Form</h2>
   <form #rForm="ngForm" name="reservationForm" (submit)="addReservation(rForm)">
 
@@ -16,7 +16,7 @@
     </div>
 
     <div class="form-group">
-      <label>Time Slots</label>
+      <label>Time Slot</label>
       <input type="text"
         class="form-control"
         name="timeSlots"
@@ -24,16 +24,19 @@
         #timeSlotsModel="ngModel"
         required>
       <span class="help-block danger" *ngIf="timeSlotsModel.errors?.['required'] && timeSlotsModel.touched">
-        Time slots are required.
+        Time slot is required.
       </span>
     </div>
 
-    <div class="form-group form-check">
-      <input type="checkbox"
-        class="form-check-input"
-        name="Booked"
-        [(ngModel)]="reservation.Booked">
-      <label class="form-check-label">Booked</label>
+    <div class="form-group">
+      <label>Booking Status</label><br>
+      <label class="radio-inline">
+        <input type="radio" name="Booked" [(ngModel)]="reservation.Booked" [value]="1"> Booked
+      </label>
+      &nbsp;
+      <label class="radio-inline">
+        <input type="radio" name="Booked" [(ngModel)]="reservation.Booked" [value]="0"> Not Booked
+      </label>
     </div>
 
     <div class="form-group">
@@ -51,7 +54,7 @@
     </button>
 
   </form>
-</div>
+</div-->
 
 <div id="theList">
   <h2>Reservation List</h2>
@@ -89,14 +92,15 @@
            style="width: 75px; height: 75px; object-fit: cover;">
     </div>
 
-<div class="col-2">
-  <input type="button"
-    value="Edit"
-    class="btn btn-success btn-sm"
-    [disabled]="areaName.invalid || timeSlots.invalid"
-    (click)="editReservation(areaName, timeSlots, !!item.Booked, item.bookingID ?? 0)">
-</div>
+    <div class="col-2">
+      <input type="button"
+        value="Edit"
+        class="btn btn-success btn-sm"
+        [disabled]="areaName.invalid || timeSlots.invalid"
+        (click)="editReservation(areaName, timeSlots, !!item.Booked, item.bookingID ?? 0)">
+    </div>
 
+  </div>
 </div>
 
 <div id="links">
@@ -107,5 +111,3 @@
     About Us
   </button>
 </div>
-
-
