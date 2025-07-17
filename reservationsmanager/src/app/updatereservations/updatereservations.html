@@ -1,1 +1,76 @@
-<p>updatereservations works!</p>
+<div class="container">
+  <h2>Edit Reservation</h2>
+  <form #f="ngForm" (ngSubmit)="updateReservation(f)">
+
+    <div class="form-group">
+      <label>Area Name</label>
+      <input
+        type="text"
+        name="areaName"
+        class="form-control"
+        [(ngModel)]="reservation.areaName"
+        required>
+    </div>
+
+    <div class="form-group">
+      <label>Time Slots</label>
+      <input
+        type="text"
+        name="timeSlots"
+        class="form-control"
+        [(ngModel)]="reservation.timeSlots"
+        required>
+    </div>
+
+    <div class="form-group">
+      <label>Booked</label>
+      <select
+        name="Booked"
+        class="form-control"
+        [(ngModel)]="reservation.Booked"
+        required>
+        <option [value]="1">Yes</option>
+        <option [value]="0">No</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Current or New Image Preview</label><br>
+      <img
+        [src]="previewUrl ? previewUrl : 'http://localhost/angularapp2/reservationsapi/uploads/' + reservation.imageName"
+        alt="Reservation Image"
+        width="100"
+        height="100"
+        class="mb-3 border rounded"
+      />
+    </div>
+
+    <div class="form-group">
+      <label>Upload New Image</label>
+      <input
+        type="file"
+        name="image"
+        class="form-control"
+        (change)="onFileSelected($event)">
+    </div>
+
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="f.invalid">
+      Update
+    </button>
+<button
+  class="btn btn-secondary"
+  [routerLink]="['/reservations']"
+  type="button">
+  Cancel
+</button>
+
+
+
+    <div *ngIf="success" class="alert alert-success mt-3">{{ success }}</div>
+    <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
+  </form>
+</div>
+

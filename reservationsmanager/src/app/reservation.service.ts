@@ -7,14 +7,18 @@ import { Reservation } from './reservation';
   providedIn: 'root',
 })
 export class ReservationService {
-  baseUrl = 'http://localhost/angularapp2/reservationsapi';  
+  baseUrl = 'http://localhost/angularapp2/reservationsapi';
 
   constructor(private http: HttpClient) {}
 
   getAll() {
     return this.http.get(`${this.baseUrl}/list.php`).pipe(
-      map((res: any) => res['data']) 
+      map((res: any) => res['data'])
     );
+  }
+
+  get(bookingID: number) {
+    return this.http.get<Reservation>(`${this.baseUrl}/view.php?bookingID=${bookingID}`);
   }
 
   add(reservation: Reservation) {

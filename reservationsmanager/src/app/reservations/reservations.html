@@ -92,13 +92,15 @@
            style="width: 75px; height: 75px; object-fit: cover;">
     </div>
 
-    <div class="col-2">
-      <input type="button"
-        value="Edit"
-        class="btn btn-success btn-sm"
-        [disabled]="areaName.invalid || timeSlots.invalid"
-        (click)="editReservation(areaName, timeSlots, !!item.Booked, item.bookingID ?? 0)">
-    </div>
+<div class="col-2">
+  <button
+    class="btn btn-success btn-sm"
+    [routerLink]="['/edit', item.bookingID]"
+    [disabled]="areaName.invalid || timeSlots.invalid">
+    Edit
+  </button>
+</div>
+
 
   </div>
 </div>
