@@ -34,35 +34,39 @@ export class Addreservations implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Optional: load available areas or time slots dynamically
   }
 
-  addReservation(f: NgForm): void {
-    this.resetAlerts();
+addReservation(f: NgForm): void {
+  this.resetAlerts();
 
-    // Default image if none selected
-    if (!this.reservation.imageName) {
-      this.reservation.imageName = 'placeholder_100.jpg';
-    }
+  // Default image if none selected
+  if (!this.reservation.imageName) {
+    this.reservation.imageName = 'placeholder_100.jpg';
+  }
 
-    this.reservationService.add(this.reservation).subscribe(
-      (res: Reservation) => {
-        this.success = 'Reservation successfully added.';
+  this.reservationService.add(this.reservation).subscribe(
+    (res: Reservation) => {
+      this.success = 'Reservation successfully added.';
 
-        // Upload image if one was selected
-        if (this.selectedFile && this.reservation.imageName !== 'placeholder_100.jpg') {
-          this.uploadFile();
-        }
-
-        f.reset();
-        this.router.navigate(['/reservations']);
-      },
-      (err) => {
-        this.error = err.error?.message || err.message || 'Error occurred while saving reservation.';
-        this.cdr.detectChanges();
+      // Upload image if one was selected
+      if (this.selectedFile && this.reservation.imageName !== 'placeholder_100.jpg') {
+        this.uploadFile();
       }
-    );
-  }
+
+      f.reset();
+      this.router.navigate(['/reservations']);
+    },
+    (err) => {
+      if (err.status === 409) {
+        this.error = 'This time slot is already booked for the selected area.';
+      } else {
+        this.error = err.error?.message || err.message || 'Error occurred while saving reservation.';
+      }
+
+      this.cdr.detectChanges();
+    }
+  );
+}
 
   uploadFile(): void {
     if (!this.selectedFile) return;

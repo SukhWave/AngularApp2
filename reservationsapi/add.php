@@ -5,7 +5,7 @@ require 'connect.php';
 $postdata = file_get_contents("php://input");
 
 if (isset($postdata) && !empty($postdata)) {
-    
+
     // Decode incoming JSON
     $request = json_decode($postdata);
 
@@ -28,6 +28,17 @@ if (isset($postdata) && !empty($postdata)) {
 
     if (empty($newImage)) {
         $newImage = 'placeholder_100.jpg';
+    }
+
+    // ✅ Check if the same area and time slot is already booked
+    $checkQuery = "SELECT * FROM `reservations` WHERE areaName = '{$areaName}' AND timeSlots = '{$timeSlots}' AND Booked = 1 LIMIT 1";
+    $result = mysqli_query($con, $checkQuery);
+
+    if (mysqli_num_rows($result) > 0) {
+        // Duplicate booking found
+        http_response_code(409); // Conflict
+        echo json_encode(['message' => 'This time slot is already booked for this area.']);
+        exit;
     }
 
     // Insert into database
