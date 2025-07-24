@@ -2,52 +2,38 @@ import { Component, ChangeDetectorRef } from '@angular/core';
 import { Auth } from '../../services/auth';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
   imports: [HttpClientModule, CommonModule, FormsModule, RouterModule],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
+
 export class Login {
   userName = '';
   password = '';
   errorMessage = '';
 
-  constructor(
-    private auth: Auth,
-    private router: Router,
-    private cdr: ChangeDetectorRef
-  ) {}
+  constructor(private auth: Auth, private router: Router, private cdr: ChangeDetectorRef) {}
 
-  login(): void {
-    this.errorMessage = '';
-
-    if (!this.userName || !this.password) {
-      this.errorMessage = 'Please enter username and password.';
-      return;
-    }
-
+  login() {
     this.auth.login({ userName: this.userName, password: this.password }).subscribe({
-      next: (res: any) => {
+      next: res => {
         if (res.success) {
           this.auth.setAuth(true);
           localStorage.setItem('username', this.userName);
-          this.router.navigate(['/reservations']);
+          this.router.navigate(['/contacts']);
+          this.cdr.detectChanges();
         } else {
-          this.errorMessage = res.message || 'Invalid credentials.';
+          this.errorMessage = res.message;
+          this.cdr.detectChanges();
         }
-        this.cdr.detectChanges();
       },
-      error: (err) => {
-        this.errorMessage = err.error?.message || 'Server error during login.';
-        this.cdr.detectChanges();
-      }
+      error: () => this.errorMessage = 'Server error during login.'
     });
   }
 }
-
