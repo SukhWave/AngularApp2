@@ -31,8 +31,7 @@ if (isset($postdata) && !empty($postdata)) {
         $newImage = 'placeholder_100.jpg';
     }
 
-    // ❌ Prevent double booking for the same area and time
-    $checkQuery = "SELECT 1 FROM reservations WHERE areaName = '{$areaName}' AND timeSlots = '{$timeSlots}' AND Booked = 1 LIMIT 1";
+    $checkQuery = "SELECT 1 FROM reservations WHERE areaName = '{$areaName}' AND timeSlots = '{$timeSlots}' LIMIT 1";
     $result = mysqli_query($con, $checkQuery);
 
     if (mysqli_num_rows($result) > 0) {
@@ -40,6 +39,7 @@ if (isset($postdata) && !empty($postdata)) {
         echo json_encode(['message' => 'This time slot is already booked for this area.']);
         exit;
     }
+
 
     // ✅ Insert reservation
     $sql = "INSERT INTO reservations (bookingID, areaName, timeSlots, Booked, imageName)
