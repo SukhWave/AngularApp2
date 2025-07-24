@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 
 import { Reservation } from '../reservation';
 import { ReservationService } from '../reservation.service';
+import { Auth } from '../services/auth';
 
 @Component({
   standalone: true,
@@ -27,16 +28,20 @@ export class Reservations implements OnInit {
 
   error = '';
   success = '';
+  userName = '';
   selectedFile: File | null = null;
 
   constructor(
     private reservationService: ReservationService,
     private http: HttpClient,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public authService: Auth
   ) {}
 
   ngOnInit(): void {
     this.getReservations();
+    this.userName = localStorage.getItem('username') || 'Guest';
+    this.cdr.detectChanges();
   }
 
   resetAlerts(): void {
@@ -51,8 +56,7 @@ export class Reservations implements OnInit {
       (data: Reservation[]) => {
         this.reservations = data;
         this.success = 'Successful list retrieval';
-        console.log('successful list retrieval');
-        console.log(this.reservations);
+        console.log('Reservations loaded:', this.reservations);
         this.cdr.detectChanges();
       },
       (err) => {
@@ -65,30 +69,30 @@ export class Reservations implements OnInit {
   addReservation(f: NgForm): void {
     this.resetAlerts();
 
-    if (f.invalid) {
-      return;
+    if (this.selectedFile) {
+      this.reservation.imageName = this.selectedFile.name;
+      this.uploadFile(); // Upload before saving reservation
+    } else {
+      this.reservation.imageName = 'placeholder_100.jpg'; // fallback
     }
 
-    this.reservation.imageName = this.selectedFile
-      ? this.selectedFile.name
-      : 'placeholder_100.jpg';
-
     this.reservationService.add(this.reservation).subscribe({
-      next: (res) => {
-        alert('Reservation added successfully!');
-        this.getReservations();
+      next: (res: Reservation) => {
+        this.reservations.push(res);
+        this.success = 'Reservation added successfully';
         f.resetForm();
+        this.selectedFile = null;
         this.reservation = {
           areaName: '',
           timeSlots: '',
           Booked: 0,
           imageName: ''
         };
-        this.selectedFile = null;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Failed to add reservation:', err);
-        alert('Failed to add reservation.');
+        this.error = 'Failed to add reservation.';
       }
     });
   }
@@ -108,13 +112,27 @@ export class Reservations implements OnInit {
       { data: updatedReservation }
     ).subscribe({
       next: () => {
-        alert('Reservation updated successfully.');
+        this.success = 'Reservation updated successfully.';
+        this.cdr.detectChanges();
       },
       error: err => {
-        alert('Failed to update reservation.');
+        this.error = 'Failed to update reservation.';
         console.error(err);
       }
     });
+  }
+
+  uploadFile(): void {
+    if (!this.selectedFile) return;
+
+    const formData = new FormData();
+    formData.append('image', this.selectedFile);
+
+    this.http.post('http://localhost/angularapp2/reservationsapi/upload.php', formData)
+      .subscribe({
+        next: res => console.log('File uploaded successfully:', res),
+        error: err => console.error('File upload failed:', err)
+      });
   }
 
   onFileSelected(event: Event): void {

@@ -1,5 +1,9 @@
 <div class="container">
-  <h2>Add Reservation</h2>
+  <div class="toolbar">
+    <h2>{{ userName }}'s Add Reservation</h2>
+    <button (click)="authService.logout()" class="btn btn-sm btn-danger">Logout</button>
+  </div>
+
   <form #f="ngForm" (ngSubmit)="addReservation(f)">
     
     <div class="form-group">
@@ -10,6 +14,7 @@
     <div class="form-group">
       <label>Time Slot</label>
       <select name="timeSlots" class="form-control" [(ngModel)]="reservation.timeSlots" required>
+        <option value="" disabled selected>Select a time slot</option>
         <option value="9am - 12pm">9am - 12pm</option>
         <option value="12pm - 3pm">12pm - 3pm</option>
         <option value="3pm - 6pm">3pm - 6pm</option>
@@ -34,6 +39,7 @@
 
     <div *ngIf="success" class="alert alert-success mt-3">{{ success }}</div>
     <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
+
   </form>
 </div>
 
@@ -42,4 +48,3 @@
     Back to Reservation List
   </button>
 </div>
-

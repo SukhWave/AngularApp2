@@ -56,6 +56,13 @@
   </form>
 </div-->
 
+<div id="theList" class="contact-list-container">
+    <div class="toolbar">
+      <span>Welcome, {{ userName }}</span>
+      <button class="logout-btn" (click)="authService.logout()">Logout</button>
+    </div>
+  </div>    
+
 <div id="theList">
   <h2>Reservation List</h2>
 
@@ -106,7 +113,7 @@
 </div>
 
 <div id="links">
-  <button class="btn btn-sm btn-primary" routerLink="/add" type="button">
+  <button class="btn btn-sm btn-primary" routerLink="/addreservations" type="button">
     Add Reservation
   </button>
   <button class="btn btn-sm btn-primary" routerLink="/about" type="button">
